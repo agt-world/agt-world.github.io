@@ -1,6 +1,934 @@
+<!DOCTYPE html>
 <html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="AGT-World: Affordance-Graphed Task Worlds">
+  <meta name="keywords" content="Robotics, Embodied AI, Simulation, Task Generation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AGT-World Project Page</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <!-- Bulma CSS Framework -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <style>
+    /* 自定义样式 */
+    body {
+      font-family: 'Noto Sans', sans-serif;
+      background-color: #fcfcfc;
+    }
+    /* 左右箭头容器 */
+    .video-slider-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      width: 100%;
+    }
+
+    .arrow-btn {
+      background: none;
+      border: none;
+      font-size: 2.5rem;
+      color: #b5b5b5;
+      cursor: pointer;
+      transition: color 0.2s, transform 0.2s;
+      padding: 0 10px;
+    }
+
+    .arrow-btn:hover {
+      color: #3273dc;
+      transform: scale(1.1);
+    }
+
+    /* Overview下方的横向菜单 */
+    .horizontal-menu {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      margin-top: 20px;
+    }
+
+    .horizontal-menu .vertical-item {
+      width: 120px;
+      flex-shrink: 0;
+    }
+
+    /* 流动跳动箭头样式 */
+    .flow-arrow {
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+      animation: bounce-color 1.5s infinite ease-in-out;
+    }
+    /* 左右跳动 + 浅蓝到深蓝的颜色渐变关键帧 */
+    @keyframes bounce-color {
+      0%, 100% {
+        transform: translateX(-5px);
+        color: #87cefa;
+      }
+      50% {
+        transform: translateX(5px); /* 向右跳动10px */
+        color: #1d4ed8;
+      }
+    }
+
+    /* Simple Tasks 6列网格布局 */
+    .simple-grid-menu {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 20px;
+      width: 80%;
+      margin-top: 20px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .simple-grid-menu .vertical-item {
+      width: 100%;
+      flex-shrink: 1;
+    }
+
+    /* 灰色大方框容器 */
+    .gray-box-container {
+      background-color: #f5f5f5;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    /* 视频容器调整 */
+    .video-wrapper {
+      text-align: center;
+    }
+
+    .video-wrapper h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #4a4a4a;
+    }
+
+    .video-wrapper video {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      background: #000;
+    }
+
+    /* 左侧垂直菜单样式 */
+    .vertical-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      height: 100%;
+      justify-content: center;
+    }
+
+    .vertical-item {
+      cursor: pointer;
+      border: 3px solid transparent;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: all 0.2s ease;
+      opacity: 0.7;
+    }
+
+    .vertical-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+
+    .vertical-item:hover {
+      opacity: 1;
+      transform: scale(1.02);
+    }
+
+    .vertical-item.active {
+      opacity: 1;
+      border-color: #3273dc;
+      box-shadow: 0 2px 8px rgba(50, 115, 220, 0.4);
+    }
+
+    .vertical-caption {
+      background: #fff;
+      text-align: center;
+      font-size: 0.8rem;
+      padding: 3px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .title-color {
+      background: linear-gradient(45deg, #e45858, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+    }
+
+    .subtitle-small {
+      font-size: 1.5rem !important;
+      margin-top: 10px !important;
+      font-weight: 400;
+      color: #4a4a4a;
+    }
+
+    .publication-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .button-gap {
+      margin: 5px; 
+    }
+
+    .section {
+      padding: 3rem 1.5rem;
+    }
+
+    .container.is-max-desktop {
+      max-width: 960px;
+    }
+
+    /* PDF 嵌入容器 */
+    .pdf-container {
+      width: 100%;
+      height: 600px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    /* 视频展示区域样式 */
+    .video-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .video-grid-3 {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 0px;
+    }
+
+    video {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* 自定义子任务流水线布局 */
+    .flow-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center; /* 垂直居中 */
+      gap: 15px;
+      margin-top: 30px;
+      margin-bottom: 20px;
+    }
+
+    .flow-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 180px; /* 固定视频的宽度 */
+      text-align: center;
+    }
+
+    .flow-step video {
+      width: 100%;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .flow-step p {
+      color: #555;
+      font-weight: 500;
+      margin-top: 5px;
+    }
+
+    /* 针对箭头在流水线中的垂直微调，使其对齐视频中心而不是包含文字的整个容器中心 */
+    .flow-container .flow-arrow {
+      margin-bottom: 30px; 
+    }
+
+    /* 核心：红框虚线高亮部分 */
+    .evolution-box {
+      position: relative;
+      border: 2px dashed #ff4757; /* 红色虚线边框 */
+      border-radius: 12px;
+      padding: 15px 10px 5px 10px;
+      background-color: #fffafb; /* 极浅的红色背景衬托 */
+    }
+
+    /* 核心：红框顶部的 Self-Evolution 胶囊标签 */
+    .evolution-label {
+      position: absolute;
+      top: -14px; /* 向上移动，卡在边框线上 */
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #ff4757;
+      color: white;
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      border-radius: 20px;
+      white-space: nowrap;
+      box-shadow: 0 2px 5px rgba(255, 71, 87, 0.3);
+      z-index: 2;
+    }
+
+  </style>
+</head>
+
 <body>
-    <h1>Project Page for My Paper</h1>
-    <p>Coming soon...</p>
+
+<!-- Header Section -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-2 publication-title">
+            <span class="title-color">AGT-World</span>: Affordance-Graphed Task Worlds
+          </h1>
+          <h2 class="subtitle is-3 publication-subtitle subtitle-small">
+            🧬 Self-Evolving Task Generation for Scalable Embodied Learning 🤖
+          </h2>
+          
+          <!-- Authors & Institution -->
+          <div class="is-size-5 publication-authors">
+            <!-- <span class="author-block">Xiang Liu<sup>1</sup>,</span>
+            <span class="author-block">Author Name<sup>2</sup></span> -->
+            <span class="author-block">Xiang Liu<sup>*</sup>,</span>
+            <span class="author-block">Sen Cui<sup>*†</sup>,</span>
+            <span class="author-block">Guocai Yao,</span>
+            <span class="author-block">Zhong Cao,</span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Jingheng Ma,</span>
+            <span class="author-block">Min Zhang,</span>
+            <span class="author-block">Changshui Zhang<sup>†</sup></span>
+          </div>
+          <!-- <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Institution Name,</span>
+            <span class="author-block"><sup>2</sup>Institution Name</span>
+          </div> -->
+
+          <!-- Links -->
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2602.12065" target="_blank" class="external-link button is-normal is-rounded is-dark button-gap">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- Arxiv Link -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2602.12065" target="_blank" class="external-link button is-normal is-rounded is-dark button-gap">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link -->
+              <span class="link-block">
+                <a href="#" target="_blank" class="external-link button is-normal is-rounded is-dark button-gap">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                </a>
+              </span>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Abstract Section -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Training robotic policies directly in the real world is expensive and unscalable. Although generative simulation enables large-scale data synthesis, current approaches often fail to generate logically coherent long-horizon tasks and struggle with dynamic physical uncertainties due to open-loop execution. 
+          </p>
+          <p>
+            To address these challenges, we propose <strong>Affordance-Graphed Task Worlds (AGT-World)</strong>, a unified framework that autonomously constructs interactive simulated environments and corresponding robot task policies based on real-world observations. Unlike methods relying on random proposals or static replication, AGT-World formalizes the task space as a structured graph, enabling the precise, hierarchical decomposition of complex goals into theoretically grounded atomic primitives. Furthermore, we introduce a Self-Evolution mechanism with hybrid feedback to autonomously refine policies, combining Vision-Language Model reasoning and geometric verification. Extensive experiments demonstrate that our method significantly outperforms in success rates and generalization, achieving a self-improving cycle of proposal, execution, and correction for scalable robot learning.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pipeline Section (PDF Embedding) -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">AGT-World Pipeline</h2>
+    <div class="content has-text-centered">
+      <img src="assets/pipeline/pipeline_preview.png" style="width: 100%; border-radius: 10px;">
+    </div>
+  </div>
+</section>
+
+<!-- Section 1: A Quick Overview of Our Results -->
+<section class="section">
+  <div class="container is-max-desktop">
+    
+    <h2 class="title is-3 has-text-centered">A Quick Overview of Our Results</h2>
+    
+    <div class="gray-box-container">
+      <div class="content has-text-justified" style="margin-bottom: 20px;">
+      </div>
+
+      <!-- 上方：带箭头的视频区域 -->
+      <div class="video-slider-container">
+        <!-- 左箭头 -->
+        <button class="arrow-btn" onclick="prevComplexTask()">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        
+        <div class="video-grid-3">
+          <div class="video-wrapper">
+            <h4>Global View</h4>
+            <video id="complex-global" autoplay muted loop playsinline controls>
+              <source src="assets/complex/complex1/overview/global.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="video-wrapper">
+            <h4>Overhead View</h4>
+            <video id="complex-overhead" autoplay muted loop playsinline controls>
+              <source src="assets/complex/complex1/overview/overhead.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="video-wrapper">
+            <h4>Wrist View</h4>
+            <video id="complex-wrist" autoplay muted loop playsinline controls>
+              <source src="assets/complex/complex1/overview/wrist.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+
+        <!-- 右箭头 -->
+        <button class="arrow-btn" onclick="nextComplexTask()">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <!-- 下方：横向分布的4个场景 -->
+      <div class="horizontal-menu" id="complex-menu">
+        <!-- 注意：去掉了 this 参数，改为自定义属性 data-id -->
+        <div class="vertical-item active" data-id="1" onclick="changeComplexTask(1)">
+          <img src="assets/complex/complex1/room_with_refrigerator.png" alt="Task 1">
+          <div class="vertical-caption">Transport a glass into a refrigerator</div>
+        </div>
+          <div class="flow-arrow"><i class="fas fa-chevron-right"></i></div>
+
+        <div class="vertical-item" data-id="2" onclick="changeComplexTask(2)">
+          <img src="assets/complex/complex2/modern_kitchen13.png" alt="Task 2">
+          <div class="vertical-caption"> Place an apple into a refrigerator</div>
+        </div>
+          <div class="flow-arrow"><i class="fas fa-chevron-right"></i></div>
+          
+        <div class="vertical-item" data-id="3" onclick="changeComplexTask(3)">
+          <img src="assets/complex/complex3/modern_kitchen2.png" alt="Task 3">
+          <div class="vertical-caption">Transfer an apple into a bowl</div>
+        </div>
+          <div class="flow-arrow"><i class="fas fa-chevron-right"></i></div>
+          
+        <div class="vertical-item" data-id="4" onclick="changeComplexTask(4)">
+          <img src="assets/complex/complex4/modern_kitchen4.png" alt="Task 4">
+          <div class="vertical-caption">Place a cup onto a table</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Section 2: Simple Tasks -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Automatically plan and execute simple tasks</h2>
+    <div class="content has-text-centered">
+      <img src="assets/pipeline/pipeline_preview.png" style="width: 100%; border-radius: 10px;">
+    </div>
+  </div>
+
+  <div class="container is-max-desktop">
+    <div class="gray-box-container">
+      <div class="content has-text-justified" style="margin-bottom: 20px;">
+      </div>
+
+      <!-- 上方：带箭头的视频区域 (2个视频并排) -->
+      <div class="video-slider-container">
+        <!-- 左箭头 -->
+        <button class="arrow-btn" onclick="prevSimpleTask()">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        
+        <div class="video-grid-2" style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div class="video-wrapper">
+            <h4>Global View</h4>
+            <video id="simple-global-video" autoplay muted loop playsinline controls>
+              <source src="assets/videos/simple_task_1_global.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="video-wrapper">
+            <h4>Overhead View</h4>
+            <video id="simple-overhead-video" autoplay muted loop playsinline controls>
+              <source src="assets/videos/simple_task_1_overhead.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+
+        <!-- 右箭头 -->
+        <button class="arrow-btn" onclick="nextSimpleTask()">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <!-- 下方：分布的12个场景 (使用 flex-wrap 自动折行排列) -->
+      <div class="simple-grid-menu" id="simple-menu">
+        
+        <div class="vertical-item active" data-id="1" onclick="switchSimpleTask(1)">
+          <img src="assets/simple/modern_kitchen/modern_kitchen.png" alt="Task 1">
+          <div class="vertical-caption">Open cabinet under microwave</div>
+        </div>
+        
+        <div class="vertical-item" data-id="2" onclick="switchSimpleTask(2)">
+          <img src="assets/simple/modern_kitchen2/modern_kitchen2.png" alt="Task 2">
+          <div class="vertical-caption">Pick up the cup</div>
+        </div>
+        
+        <div class="vertical-item" data-id="3" onclick="switchSimpleTask(3)">
+          <img src="assets/simple/modern_kitchen4/modern_kitchen4.png" alt="Task 3">
+          <div class="vertical-caption">Pick up the cup</div>
+        </div>
+        
+        <div class="vertical-item" data-id="4" onclick="switchSimpleTask(4)">
+          <img src="assets/simple/modern_kitchen5/modern_kitchen5.png" alt="Task 4">
+          <div class="vertical-caption">Open refrigerator</div>
+        </div>
+        
+        <div class="vertical-item" data-id="5" onclick="switchSimpleTask(5)">
+          <img src="assets/simple/modern_kitchen8/modern_kitchen8.png" alt="Task 5">
+          <div class="vertical-caption">Open cabinet under bottle</div>
+        </div>
+        
+        <div class="vertical-item" data-id="6" onclick="switchSimpleTask(6)">
+          <img src="assets/simple/modern_kitchen10/modern_kitchen10.png" alt="Task 6">
+          <div class="vertical-caption">Open cabinet under the microwave</div>
+        </div>
+
+        <div class="vertical-item" data-id="7" onclick="switchSimpleTask(7)">
+          <img src="assets/simple/modern_kitchen11/modern_kitchen11.png" alt="Task 7">
+          <div class="vertical-caption">Open refrigerator</div>
+        </div>
+        
+        <div class="vertical-item" data-id="8" onclick="switchSimpleTask(8)">
+          <img src="assets/simple/modern_kitchen13/modern_kitchen13.png" alt="Task 8">
+          <div class="vertical-caption">Pick up the apple</div>
+        </div>
+        
+        <div class="vertical-item" data-id="9" onclick="switchSimpleTask(9)">
+          <img src="assets/simple/modern_kitchen14/modern_kitchen14.png" alt="Task 9">
+          <div class="vertical-caption">Pick up half apple on the cabinet</div>
+        </div>
+        
+        <div class="vertical-item" data-id="10" onclick="switchSimpleTask(10)">
+          <img src="assets/simple/modern_studio_apartment_workspace/modern_studio_apartment_workspace.png" alt="Task 10">
+          <div class="vertical-caption">Pick up dice on the table</div>
+        </div>
+        
+        <div class="vertical-item" data-id="11" onclick="switchSimpleTask(11)">
+          <img src="assets/simple/room_with_refrigerator/room_with_refrigerator.png" alt="Task 11">
+          <div class="vertical-caption">Open refrigerator</div>
+        </div>
+        
+        <div class="vertical-item" data-id="12" onclick="switchSimpleTask(12)">
+          <img src="assets/simple/bedroom/bedroom.png" alt="Task 12">
+          <div class="vertical-caption">Pick up glass on the table</div>
+        </div>
+
+      </div>
+        
+    </div>
+  </div>
+</section>
+
+<!-- Section 3: Complex Long-horizon Tasks -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Self-Evolution Mechanism</h2>
+    
+    <!-- PDFs Display (Side by Side) -->
+    <div class="columns is-centered" style="margin-bottom: 40px;">
+      <div class="column is-6">
+        <img src="assets/pipeline/pipeline_preview.png" style="width: 100%; border-radius: 10px;">
+      </div>
+      <div class="column is-6">      
+        <img src="assets/pipeline/pipeline_preview.png" style="width: 100%; border-radius: 10px;">
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== Example 1 ==================== -->
+  <div class="container is-max-desktop">
+    <h3 class="title is-4">Example 1: "Transport a glass into a refrigerator"</h3>
+    <div class="gray-box-container">
+
+      <div class="flow-container" id="flow-ex1">
+          <!-- Step 1 -->
+          <div class="flow-step">
+              <video src="assets/complex/complex1/sub_task_1/demo0_iter0_try0_viewer_cam_sensor.mp4" autoplay muted loop playsinline></video>
+              <p class="is-size-7">1. Open Refrigerator</p>
+          </div>
+
+          <!-- 蓝色跳动小箭头 -->
+          <div class="flow-arrow"><i class="fas fa-chevron-right"></i></div>
+
+          <!-- Step 2 -->
+          <div class="flow-step">
+              <video src="assets/complex/complex1/sub_task_2/demo0_iter0_try0_viewer_cam_sensor.mp4" autoplay muted loop playsinline></video>
+              <p class="is-size-7">2. Pick Up Glass</p>
+          </div>
+
+          <!-- 蓝色跳动小箭头 -->
+          <div class="flow-arrow"><i class="fas fa-chevron-right"></i></div>
+
+          <!-- Step 3 (核心：Evolution 高亮红框) -->
+          <div class="flow-step evolution-box">
+              <span class="evolution-label">Self-Evolution (2 Iterations)</span>
+              <video src="assets/complex/complex1/sub_task_3/demo0_iter0_try0_viewer_cam_sensor.mp4" autoplay muted loop playsinline></video>
+              <p class="is-size-7">3. Put Glass In</p>
+          </div>
+
+          <!-- 蓝色跳动小箭头 -->
+          <div class="flow-arrow"><i class="fas fa-chevron-right"></i></div>
+
+          <!-- Step 4 -->
+          <div class="flow-step">
+              <video src="assets/complex/complex1/sub_task_4/demo0_iter0_try0_viewer_cam_sensor.mp4" autoplay muted loop playsinline></video>
+              <p class="is-size-7">4. Close Refrigerator</p>
+          </div>
+      </div>
+
+      <!-- 中间：加一条分割线，区分流水线和具体进化过程 -->
+      <hr style="background-color: #e5e5e5; margin: 40px 0 30px 0;">
+
+      <div class="columns is-centered is-vcentered">
+        <div class="column is-8 has-text-centered">
+          <video id="evolution-video-1" autoplay muted loop playsinline controls style="width: 100%; border: 2px solid #8b5cf6; border-radius: 8px;">
+            <source src="assets/complex/complex1/sub_task_3/demo0_iter0_try0_viewer_cam_sensor.mp4" type="video/mp4">
+          </video>
+          <p id="evolution-caption-1" class="is-italic mt-2">Iteration 2 (Final Success)</p>
+        </div>
+        
+        <div class="column is-4">
+           <aside class="menu">
+            <p class="menu-label" style="font-weight: bold; color: #555;">Evolution History</p>
+            <ul class="menu-list" id="evolution-menu-1">
+              <li><a onclick="updateEvolution1('iter0', 'Iteration 0: Failed (Collision)', this)">Iteration 0</a></li>
+              <li><a onclick="updateEvolution1('iter1', 'Iteration 1: Failed (Grasp Slip)', this)">Iteration 1</a></li>
+              <li><a class="is-active" onclick="updateEvolution1('iter2', 'Iteration 2: Success', this)">Iteration 2 (Final)</a></li>
+            </ul>
+           </aside>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ==================== Example 2 ==================== -->
+  <div class="container is-max-desktop" style="margin-top: 60px;">
+    <h3 class="title is-4">Example 2: "Transfer an apple into a bowl"</h3>
+    <div class="gray-box-container">
+
+      <div class="flow-container" id="flow-ex1" style="gap: 80px;">
+          <!-- Step 1 -->
+          <div class="flow-step">
+              <video src="assets/complex/complex1/sub_task_1/demo0_iter0_try0_viewer_cam_sensor.mp4" autoplay muted loop playsinline></video>
+              <p class="is-size-7">1. Pick Up Apple</p>
+          </div>
+
+          <!-- 蓝色跳动小箭头 -->
+          <div class="flow-arrow"><i class="fas fa-chevron-right"></i></div>
+
+          <!-- Step 2 (核心：Evolution 高亮红框) -->
+          <div class="flow-step evolution-box">
+              <span class="evolution-label">Self-Evolution (2 Iterations)</span>
+              <video src="assets/complex/complex1/sub_task_2/demo0_iter2_try0_viewer_cam_sensor.mp4" autoplay muted loop playsinline></video>
+              <p class="is-size-7">2. Put Apple Into</p>
+          </div>
+      </div>
+
+      <!-- 中间：加一条分割线，区分流水线和具体进化过程 -->
+      <hr style="background-color: #e5e5e5; margin: 40px 0 30px 0;">
+
+      <div class="columns is-centered is-vcentered">
+        <div class="column is-8 has-text-centered">
+          <video id="evolution-video-2" autoplay muted loop playsinline controls style="width: 100%; border: 2px solid #8b5cf6; border-radius: 8px;">
+            <source src="assets/complex/complex3/sub_task_2/demo0_iter0_try0_viewer_cam_sensor.mp4" type="video/mp4">
+          </video>
+          <p id="evolution-caption-2" class="is-italic mt-2">Iteration 2 (Final Success)</p>
+        </div>
+        
+        <div class="column is-4">
+           <aside class="menu">
+            <p class="menu-label" style="font-weight: bold; color: #555;">Evolution History</p>
+            <ul class="menu-list" id="evolution-menu-2">
+              <li><a onclick="updateEvolution3('iter0', 'Iteration 0: Failed', this)">Iteration 0</a></li>
+              <li><a onclick="updateEvolution3('iter1', 'Iteration 1: Failed', this)">Iteration 1</a></li>
+              <li><a class="is-active" onclick="updateEvolution3('iter2', 'Iteration 2: Success', this)">Iteration 2 (Final)</a></li>
+            </ul>
+           </aside>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<script>
+  // ==========================================
+  // Data Configuration 
+  // ==========================================
+  
+  const complexTasks = {
+    1: {
+      global: 'assets/complex/complex1/overview/global.mp4',
+      overhead: 'assets/complex/complex1/overview/overhead.mp4',
+      wrist: 'assets/complex/complex1/overview/wrist.mp4'
+    },
+    2: {
+      global: 'assets/complex/complex2/overview/global.mp4',
+      overhead: 'assets/complex/complex2/overview/overhead.mp4',
+      wrist: 'assets/complex/complex2/overview/wrist.mp4'
+    },
+    3: {
+      global: 'assets/complex/complex3/overview/global.mp4',
+      overhead: 'assets/complex/complex3/overview/overhead.mp4',
+      wrist: 'assets/complex/complex3/overview/wrist.mp4'
+    },
+    4: {
+      global: 'assets/complex/complex4/overview/global.mp4',
+      overhead: 'assets/complex/complex4/overview/overhead.mp4',
+      wrist: 'assets/complex/complex4/overview/wrist.mp4'
+    }
+  };
+
+  const simpleTasks = {
+    'task1': {
+      global: 'assets/simple/modern_kitchen/Open_Cabinet_Under_Microwave/global.mp4',
+      overhead: 'assets/simple/modern_kitchen/Open_Cabinet_Under_Microwave/overhead.mp4'
+    },
+    'task2': {
+      global: 'assets/simple/modern_kitchen2/pick_up_the_cup/global.mp4',
+      overhead: 'assets/simple/modern_kitchen2/pick_up_the_cup/overhead.mp4'
+    },
+    'task3': {
+      global: 'assets/simple/modern_kitchen4/pick_up_the_cup/global.mp4',
+      overhead: 'assets/simple/modern_kitchen4/pick_up_the_cup/overhead.mp4'
+    },
+    'task4': {
+      global: 'assets/simple/modern_kitchen5/open_refrigerator/global.mp4',
+      overhead: 'assets/simple/modern_kitchen5/open_refrigerator/overhead.mp4'
+    },
+    'task5': {
+      global: 'assets/simple/modern_kitchen8/open_cabinet_under_bottle/global.mp4',
+      overhead: 'assets/simple/modern_kitchen8/open_cabinet_under_bottle/overhead.mp4'
+    },
+    'task6': {
+      global: 'assets/simple/modern_kitchen10/Open_Cabinet_Under_The_Microwave/global.mp4',
+      overhead: 'assets/simple/modern_kitchen10/Open_Cabinet_Under_The_Microwave/overhead.mp4'
+    },
+    'task7': {
+      global: 'assets/simple/modern_kitchen11/open_refrigerator/global.mp4',
+      overhead: 'assets/simple/modern_kitchen11/open_refrigerator/overhead.mp4'
+    },
+    'task8': {
+      global: 'assets/simple/modern_kitchen13/pick_up_the_apple/global.mp4',
+      overhead: 'assets/simple/modern_kitchen13/pick_up_the_apple/overhead.mp4'
+    },
+    'task9': {
+      global: 'assets/simple/modern_kitchen14/pick_up_half_apple_on_the_cabinet/global.mp4',
+      overhead: 'assets/simple/modern_kitchen14/pick_up_half_apple_on_the_cabinet/overhead.mp4'
+    },
+    'task10': {
+      global: 'assets/simple/modern_studio_apartment_workspace/pick_up_dice_on_the_table/global.mp4',
+      overhead: 'assets/simple/modern_studio_apartment_workspace/pick_up_dice_on_the_table/overhead.mp4'
+    },
+    'task11': {
+      global: 'assets/simple/room_with_refrigerator/open_refrigerator/global.mp4',
+      overhead: 'assets/simple/room_with_refrigerator/open_refrigerator/overhead.mp4'
+    },
+    'task12': {
+      global: 'assets/simple/bedroom/pick_up_glass_on_the_table/global.mp4',
+      overhead: 'assets/simple/bedroom/pick_up_glass_on_the_table/overhead.mp4'
+    }
+  };
+
+  const evolutionData1 = {
+    'iter0': 'assets/complex/complex1/sub_task_3/demo0_iter0_try0_viewer_cam_sensor.mp4',
+    'iter1': 'assets/complex/complex1/sub_task_3/demo0_iter1_try0_viewer_cam_sensor.mp4',
+    'iter2': 'assets/complex/complex1/sub_task_3/demo0_iter2_try0_viewer_cam_sensor.mp4'
+  };
+
+  const evolutionData3 = {
+    'iter0': 'assets/complex/complex3/sub_task_2/demo0_iter0_try0_viewer_cam_sensor.mp4',
+    'iter1': 'assets/complex/complex3/sub_task_2/demo0_iter1_try0_viewer_cam_sensor.mp4',
+    'iter2': 'assets/complex/complex3/sub_task_2/demo0_iter2_try0_viewer_cam_sensor.mp4'
+  };
+
+  // ==========================================
+  // Functions
+  // ==========================================
+
+  let currentComplexTaskId = 1;
+  const totalComplexTasks = 4;
+
+  function changeComplexTask(taskId) {
+    currentComplexTaskId = taskId; // 更新当前状态
+    const task = complexTasks[taskId];
+    if (!task) return;
+
+    const vGlobal = document.getElementById('complex-global');
+    const vOverhead = document.getElementById('complex-overhead');
+    const vWrist = document.getElementById('complex-wrist');
+
+    vGlobal.src = task.global;
+    vOverhead.src = task.overhead;
+    vWrist.src = task.wrist;
+
+    // 修复JS切换视频时的黑屏bug：在切换 src 后强制执行 load()
+    vGlobal.load(); vGlobal.play();
+    vOverhead.load(); vOverhead.play();
+    vWrist.load(); vWrist.play();
+
+    // 更新底部选中状态 (通过 data-id 查找，不再依赖 this)
+    const menuItems = document.querySelectorAll('#complex-menu .vertical-item');
+    menuItems.forEach(item => item.classList.remove('active'));
+    
+    const activeItem = document.querySelector(`#complex-menu .vertical-item[data-id="${taskId}"]`);
+    if(activeItem) activeItem.classList.add('active');
+  }
+
+  // 向左箭头点击事件
+  function prevComplexTask() {
+    let newId = currentComplexTaskId - 1;
+    if (newId < 1) newId = totalComplexTasks; // 循环跳转到最后
+    changeComplexTask(newId);
+  }
+
+  // 向右箭头点击事件
+  function nextComplexTask() {
+    let newId = currentComplexTaskId + 1;
+    if (newId > totalComplexTasks) newId = 1; // 循环跳转到开头
+    changeComplexTask(newId);
+  }
+
+  let currentSimpleTaskId = 1;
+  const totalSimpleTasks = 12;
+
+  function switchSimpleTask(taskId) {
+    currentSimpleTaskId = taskId;
+    const data = simpleTasks['task' + taskId] || simpleTasks[taskId]; 
+    
+    if(data) {
+      const vGlobal = document.getElementById('simple-global-video');
+      const vOverhead = document.getElementById('simple-overhead-video');
+      
+      vGlobal.src = data.global;
+      vOverhead.src = data.overhead;
+      
+      // 强制重新加载以解决可能的黑屏问题
+      vGlobal.load(); vGlobal.play();
+      vOverhead.load(); vOverhead.play();
+    }
+
+    // 更新底部选中状态高亮 (红框/蓝框)
+    const menuItems = document.querySelectorAll('#simple-menu .vertical-item');
+    menuItems.forEach(item => item.classList.remove('active'));
+    
+    const activeItem = document.querySelector(`#simple-menu .vertical-item[data-id="${taskId}"]`);
+    if(activeItem) activeItem.classList.add('active');
+  }
+
+  // 向左箭头点击事件 (Simple Tasks)
+  function prevSimpleTask() {
+    let newId = currentSimpleTaskId - 1;
+    if (newId < 1) newId = totalSimpleTasks; // 循环到最后一个
+    switchSimpleTask(newId);
+  }
+
+  // 向右箭头点击事件 (Simple Tasks)
+  function nextSimpleTask() {
+    let newId = currentSimpleTaskId + 1;
+    if (newId > totalSimpleTasks) newId = 1; // 循环回第一个
+    switchSimpleTask(newId);
+  }
+
+  function updateEvolution1(iterId, captionText, clickedElement) {
+    const videoPath = evolutionData1[iterId];
+    if(videoPath) {
+      const vid = document.getElementById('evolution-video-1');
+      vid.src = videoPath;
+      vid.load();
+      vid.play();
+      document.getElementById('evolution-caption-1').innerText = captionText;
+      
+      const links = document.querySelectorAll('#evolution-menu-1 a');
+      links.forEach(link => link.classList.remove('is-active'));
+      if(clickedElement) clickedElement.classList.add('is-active');
+    }
+  }
+
+  function updateEvolution3(iterId, captionText, clickedElement) {
+    const videoPath = evolutionData3[iterId];
+    if(videoPath) {
+      const vid = document.getElementById('evolution-video-2');
+      vid.src = videoPath;
+      document.getElementById('evolution-caption-2').innerText = captionText;
+      
+      const links = document.querySelectorAll('#evolution-menu-2 a');
+      links.forEach(link => link.classList.remove('is-active'));
+      if(clickedElement) clickedElement.classList.add('is-active');
+    }
+  }
+
+
+</script>
+
 </body>
 </html>
