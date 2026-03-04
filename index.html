@@ -7,6 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AGT-World Project Page</title>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
 
@@ -281,6 +284,27 @@
       white-space: nowrap;
       box-shadow: 0 2px 5px rgba(255, 71, 87, 0.3);
       z-index: 2;
+    }
+
+    /* Citation 样式 */
+    .citation-box {
+      background-color: #f5f5f5;
+      padding: 20px;
+      border-radius: 10px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.9rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+
+    /* Theory 板块样式 */
+    .theory-item {
+      margin-bottom: 1.5rem;
+    }
+    .theory-title {
+      color: #3273dc;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
     }
 
   </style>
@@ -741,8 +765,85 @@
 
     </div>
   </div>
+
+  <!-- ==================== Theoretical Foundations ==================== -->
+  <div class="container is-max-desktop" style="margin-top: 40px;">
+      <h3 class="title is-4">Theoretical Foundations</h3>
+      <div class="gray-box-container content">
+        
+        <div class="theory-item">
+          <p class="theory-title">1. Task Modeling & Graph Definition</p>
+          <p>We formalize the task space as a structured <strong>Affordance-Graphed Task World</strong>. The world is represented as a universal directed graph \( \mathcal{G} = (V, E) \):</p>
+          <ul>
+            <li><strong>Nodes (\(V\)):</strong> Defined by the triplet \( V = \mathcal{O} \times \mathcal{A} \times \mathbb{N}^+ \), where \( \mathcal{O} \) is the set of manipulable objects, \( \mathcal{A} \) is the set of atomic actions, and \( \mathbb{N}^+ \) denotes the discrete temporal dimension.</li>
+            <li><strong>Simple Task (\(T\)):</strong> A primitive manipulation unit defined as \( T = (o_t, o_{s_1}, o_{s_2}, s_\text{init}, s_\text{goal}) \), where \( o_t \) is the target object, and \( s_\text{goal} \) defines the success criteria.</li>
+            <li><strong>Complex Long-horizon Task (\(\mathcal{T}\)):</strong> An ordered sequence of simple tasks \( \mathcal{T} = \{T_1, T_2, ..., T_K\} \).</li>
+          </ul>
+        </div>
+
+        <div class="theory-item">
+          <p class="theory-title">2. Compositional Reachability Theorem</p>
+          <p>Based on our probabilistic graph model, we provide a theoretical guarantee for the solvability of generated tasks:</p>
+          <div class="notification is-light">
+            <strong>Proposition:</strong> Let \( S_\tau \subset \mathcal{S} \) denote the global world state at time \( \tau \). Assume the <em>AGT-World</em> graph \( G_{S_0} \subset \mathcal{G} \) satisfies:
+            <ol style="margin-top: 10px; margin-bottom: 10px; padding-left: 20px;">
+              <li><strong>Primitive Completeness:</strong> For any simple task \( T=\langle o_t,o_{s_1},o_{s_2},s_\text{init},s_\text{goal}\rangle, s_\text{init},s_\text{goal}\in \mathcal{S} \), there exists an action flow \( \pi(T)\subset V_{S_0} \text{ s.t. } \mathbb{P}(s_\text{goal} \mid s_\text{init},\pi) > 0 \);</li>
+              <li><strong>Connectivity of Context:</strong> For any two consecutive simple tasks \( T_k, T_{k+1} \), if their boundary conditions align (i.e., \( S_\text{goal}^{(k)} \approx S_\text{init}^{(k+1)} \)), there exists an action transfer \( e_k(o_t^{(k)},o_t^{(k+1)}) \subset V_{S_0} \) connecting them with a positive probability \( \mathbb{P}\left(S_\text{init}^{(k+1)} = S_\text{goal}^{(k)+} \mid S_\text{goal}^{(k)},e_k\right) > 0 \).</li>
+            </ol>
+            Then for any complex long-horizon task \( \mathcal{T}=\{T_k\}_{k=1}^{K} \) and global world state \( S_0=S_\text{init}^{(1)}, S_\tau=S_\text{goal}^{(K)}\subset \mathcal{S} \), there exists
+            <div class="math-block">
+            \[
+            \begin{split}
+                &\Pi=\{\pi_k\subset V_{S_0}: \pi_k\sim p_\text{F}(\pi\mid \mathcal{T};\epsilon_1)\}_{k=1}^K,\\
+                &\mathcal{E}=\{e_k\subset V_{S_0}: e_k\sim p_\text{T}(e\mid \mathcal{T};\epsilon_2)\}_{k=1}^{K-1},
+            \end{split}
+            \]
+            </div>
+            such that
+            <div class="math-block">
+            \[
+            \mathbb{P}\left(S_\tau\mid S_0,\Pi,\mathcal{E}\right)=\prod_{k=1}^{K}\underbrace{\mathbb{P}(S_{\tau_k}\mid S_{\tau_{k-1}}^+,\pi_k)}_{\text{Execution Feasibility}}\cdot\prod_{k=1}^{K-1}\underbrace{\mathbb{P}(S_{\tau_k}^+\mid S_{\tau_{k}},e_k)}_{\text{Transition Consistency}}>0
+            \]
+            </div>
+            with \( [0,\tau]=\bigcup_{k=1}^K[\tau_{k-1},\tau_{k}] \).
+          </div>
+        </div>
+
+        <div class="theory-item">
+          <p class="theory-title">3. Self-Evolution Mechanism (Expression 17)</p>
+          <p>To refine execution parameters autonomously, the evolution from iteration \( \tau \) to \( \tau+1 \) is governed by the following mechanism:</p>
+          <p class="has-text-centered">
+            \[ (\pi_k^{\tau+1}, m_k^{\tau+1}) \sim p_E \left( \pi_k \mid X_k^I, m, \mathcal{T}, \{ (\pi_k^{(i)}, m_k^{(i)}) \}_{i=0}^\tau ; \epsilon_4 \right). \]
+          </p>
+          <p><strong>Symbols Explanation:</strong></p>
+          <ul>
+            <li>\( \pi_k \): The action flow (policy) for the \(k\)-th sub-task.</li>
+            <li>\( X_k^I \): Multi-view visual feedback (Global, Overhead, Wrist).</li>
+            <li>\( m \): Step-wise semantic critique generated by the VLM.</li>
+            <li>\( \{ (\pi_k^{(i)}, m_k^{(i)}) \}_{i=0}^\tau \): Historical execution memory including previous failed attempts and reasoning.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 </section>
 
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Citation</h2>
+    <div class="content">
+      <p>If you use this work or find it helpful, please consider citing:</p>
+      <div class="citation-box">@article{liu2026agtworld,
+  title={Affordance-Graphed Task Worlds: Self-Evolving Task Generation for Scalable Embodied Learning},
+  author={Liu, Xiang and Cui, Sen and Yao, Guocai and Cao, Zhong and Ma, Jingheng and Zhang, Min and Zhang, Changshui},
+  journal={arXiv preprint arXiv:2602.12065},
+  year={2026}
+}</div>
+    </div>
+  </div>
+</section>
 
 <script>
   // ==========================================
