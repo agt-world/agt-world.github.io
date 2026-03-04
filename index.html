@@ -314,16 +314,37 @@
           <div class="is-size-5 publication-authors">
             <!-- <span class="author-block">Xiang Liu<sup>1</sup>,</span>
             <span class="author-block">Author Name<sup>2</sup></span> -->
-            <span class="author-block">Xiang Liu<sup>*</sup>,</span>
-            <span class="author-block">Sen Cui<sup>*†</sup>,</span>
-            <span class="author-block">Guocai Yao,</span>
-            <span class="author-block">Zhong Cao,</span>
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~Xiang_Liu32" target="_blank">
+                Xiang Liu
+              </a><sup>*</sup>,</span>
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~Sen_Cui1" target="_blank">
+                Sen Cui
+              </a><sup>*†</sup>,</span>
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~Guocai_Yao1" target="_blank">
+                Guocai Yao
+              </a>,</span>
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~Zhong_Cao1" target="_blank">
+                Zhong Cao
+              </a>,</span>
           </div>
 
           <div class="is-size-5 publication-authors">
-            <span class="author-block">Jingheng Ma,</span>
-            <span class="author-block">Min Zhang,</span>
-            <span class="author-block">Changshui Zhang<sup>†</sup></span>
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~Jingheng_Ma1" target="_blank">
+                Jingheng Ma
+              </a>,</span>
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~Min_Zhang17" target="_blank">
+                Min Zhang
+              </a>,</span>
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~Changshui_Zhang2" target="_blank">
+                Changshui Zhang
+              </a><sup>†</sup></span>
           </div>
           <!-- <div class="is-size-5 publication-authors">
             <span class="author-block"><sup>1</sup>Institution Name,</span>
@@ -490,17 +511,17 @@
           <i class="fas fa-chevron-left"></i>
         </button>
         
-        <div class="video-grid-2" style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="video-grid-2" style="flex: 1; gap: 40px;">
           <div class="video-wrapper">
             <h4>Global View</h4>
             <video id="simple-global-video" autoplay muted loop playsinline controls>
-              <source src="assets/videos/simple_task_1_global.mp4" type="video/mp4">
+              <source src="assets/simple/modern_kitchen/Open_Cabinet_Under_Microwave/global.mp4" type="video/mp4">
             </video>
           </div>
           <div class="video-wrapper">
             <h4>Overhead View</h4>
             <video id="simple-overhead-video" autoplay muted loop playsinline controls>
-              <source src="assets/videos/simple_task_1_overhead.mp4" type="video/mp4">
+              <source src="assets/simple/modern_kitchen/Open_Cabinet_Under_Microwave/overhead.mp4" type="video/mp4">
             </video>
           </div>
         </div>
@@ -597,7 +618,7 @@
       <div class="flow-container" id="flow-ex1">
           <!-- Step 1 -->
           <div class="flow-step">
-              <video src="assets/complex/complex1/sub_task_1/demo0_iter0_try0_viewer_cam_sensor.mp4" autoplay muted loop playsinline></video>
+              <video src="assets/complex/complex1/sub_task_1/demo0_iter0_try0_viewer_cam_sensor.mp4" autoplay muted loop playsinline controls></video>
               <p class="is-size-7">1. Open Refrigerator</p>
           </div>
 
@@ -606,7 +627,7 @@
 
           <!-- Step 2 -->
           <div class="flow-step">
-              <video src="assets/complex/complex1/sub_task_2/demo0_iter0_try0_viewer_cam_sensor.mp4" autoplay muted loop playsinline></video>
+              <video src="assets/complex/complex1/sub_task_2/demo0_iter0_try0_viewer_cam_sensor.mp4" autoplay muted loop playsinline controls></video>
               <p class="is-size-7">2. Pick Up Glass</p>
           </div>
 
@@ -616,7 +637,7 @@
           <!-- Step 3 (核心：Evolution 高亮红框) -->
           <div class="flow-step evolution-box">
               <span class="evolution-label">Self-Evolution (2 Iterations)</span>
-              <video src="assets/complex/complex1/sub_task_3/demo0_iter0_try0_viewer_cam_sensor.mp4" autoplay muted loop playsinline></video>
+              <video src="assets/complex/complex1/sub_task_3/demo0_iter2_try0_viewer_cam_sensor.mp4" autoplay muted loop playsinline controls></video>
               <p class="is-size-7">3. Put Glass In</p>
           </div>
 
@@ -625,7 +646,7 @@
 
           <!-- Step 4 -->
           <div class="flow-step">
-              <video src="assets/complex/complex1/sub_task_4/demo0_iter0_try0_viewer_cam_sensor.mp4" autoplay muted loop playsinline></video>
+              <video src="assets/complex/complex1/sub_task_4/demo0_iter0_try0_viewer_cam_sensor.mp4" autoplay muted loop playsinline controls></video>
               <p class="is-size-7">4. Close Refrigerator</p>
           </div>
       </div>
@@ -635,9 +656,21 @@
 
       <div class="columns is-centered is-vcentered">
         <div class="column is-8 has-text-centered">
-          <video id="evolution-video-1" autoplay muted loop playsinline controls style="width: 100%; border: 2px solid #8b5cf6; border-radius: 8px;">
-            <source src="assets/complex/complex1/sub_task_3/demo0_iter0_try0_viewer_cam_sensor.mp4" type="video/mp4">
-          </video>
+          <div class="video-grid-2">
+            <div class="video-wrapper">
+              <video id="evolution-video-1-global" autoplay muted loop playsinline controls style="width: 70%; border: 2px solid #8b5cf6; border-radius: 8px;">
+                <source src="assets/complex/complex1/sub_task_3/demo0_iter2_try0_viewer_cam_sensor.mp4" type="video/mp4">
+              </video>
+              <h4 class="is-size-7 mt-1 has-text-weight-bold">Global View</h4>
+            </div>
+            <div class="video-wrapper">
+              <video id="evolution-video-1-overhead" autoplay muted loop playsinline controls style="width: 70%; border: 2px solid #8b5cf6; border-radius: 8px;">
+                <source src="assets/complex/complex1/sub_task_3/demo0_iter2_try0_external_cam0.mp4" type="video/mp4">
+              </video>
+              <h4 class="is-size-7 mt-1 has-text-weight-bold">Overhead View</h4>
+            </div>
+          </div>
+
           <p id="evolution-caption-1" class="is-italic mt-2">Iteration 2 (Final Success)</p>
         </div>
         
@@ -665,7 +698,7 @@
       <div class="flow-container" id="flow-ex1" style="gap: 80px;">
           <!-- Step 1 -->
           <div class="flow-step">
-              <video src="assets/complex/complex1/sub_task_1/demo0_iter0_try0_viewer_cam_sensor.mp4" autoplay muted loop playsinline></video>
+              <video src="assets/complex/complex3/sub_task_1/demo0_iter0_try0_viewer_cam_sensor.mp4" autoplay muted loop playsinline controls></video>
               <p class="is-size-7">1. Pick Up Apple</p>
           </div>
 
@@ -675,7 +708,7 @@
           <!-- Step 2 (核心：Evolution 高亮红框) -->
           <div class="flow-step evolution-box">
               <span class="evolution-label">Self-Evolution (2 Iterations)</span>
-              <video src="assets/complex/complex1/sub_task_2/demo0_iter2_try0_viewer_cam_sensor.mp4" autoplay muted loop playsinline></video>
+              <video src="assets/complex/complex3/sub_task_2/demo0_iter2_try0_viewer_cam_sensor.mp4" autoplay muted loop playsinline controls></video>
               <p class="is-size-7">2. Put Apple Into</p>
           </div>
       </div>
@@ -685,9 +718,21 @@
 
       <div class="columns is-centered is-vcentered">
         <div class="column is-8 has-text-centered">
-          <video id="evolution-video-2" autoplay muted loop playsinline controls style="width: 100%; border: 2px solid #8b5cf6; border-radius: 8px;">
-            <source src="assets/complex/complex3/sub_task_2/demo0_iter0_try0_viewer_cam_sensor.mp4" type="video/mp4">
-          </video>
+          <div class="video-grid-2">
+            <div class="video-wrapper">
+              <video id="evolution-video-2-global" autoplay muted loop playsinline controls style="width: 70%; border: 2px solid #8b5cf6; border-radius: 8px;">
+                <source src="assets/complex/complex3/sub_task_2/demo0_iter2_try0_viewer_cam_sensor.mp4" type="video/mp4">
+              </video>
+              <h4 class="is-size-7 mt-1 has-text-weight-bold">Global View</h4>
+            </div>
+            <div class="video-wrapper">
+              <video id="evolution-video-2-overhead" autoplay muted loop playsinline controls style="width: 70%; border: 2px solid #8b5cf6; border-radius: 8px;">
+                <source src="assets/complex/complex3/sub_task_2/demo0_iter2_try0_external_cam0.mp4" type="video/mp4">
+              </video>
+              <h4 class="is-size-7 mt-1 has-text-weight-bold">Overhead View</h4>
+            </div>
+          </div>
+
           <p id="evolution-caption-2" class="is-italic mt-2">Iteration 2 (Final Success)</p>
         </div>
         
@@ -788,15 +833,33 @@
   };
 
   const evolutionData1 = {
-    'iter0': 'assets/complex/complex1/sub_task_3/demo0_iter0_try0_viewer_cam_sensor.mp4',
-    'iter1': 'assets/complex/complex1/sub_task_3/demo0_iter1_try0_viewer_cam_sensor.mp4',
-    'iter2': 'assets/complex/complex1/sub_task_3/demo0_iter2_try0_viewer_cam_sensor.mp4'
+    'iter0': {
+      global: 'assets/complex/complex1/sub_task_3/demo0_iter0_try0_viewer_cam_sensor.mp4',
+      overhead: 'assets/complex/complex1/sub_task_3/demo0_iter0_try0_external_cam0.mp4',
+    },
+    'iter1': {
+      global: 'assets/complex/complex1/sub_task_3/demo0_iter1_try0_viewer_cam_sensor.mp4',
+      overhead: 'assets/complex/complex1/sub_task_3/demo0_iter1_try0_external_cam0.mp4',
+    },
+    'iter2': {
+      global: 'assets/complex/complex1/sub_task_3/demo0_iter2_try0_viewer_cam_sensor.mp4',
+      overhead: 'assets/complex/complex1/sub_task_3/demo0_iter2_try0_external_cam0.mp4',
+    }
   };
 
   const evolutionData3 = {
-    'iter0': 'assets/complex/complex3/sub_task_2/demo0_iter0_try0_viewer_cam_sensor.mp4',
-    'iter1': 'assets/complex/complex3/sub_task_2/demo0_iter1_try0_viewer_cam_sensor.mp4',
-    'iter2': 'assets/complex/complex3/sub_task_2/demo0_iter2_try0_viewer_cam_sensor.mp4'
+    'iter0': {
+      global: 'assets/complex/complex3/sub_task_2/demo0_iter0_try0_viewer_cam_sensor.mp4',
+      overhead: 'assets/complex/complex3/sub_task_2/demo0_iter0_try0_external_cam0.mp4',
+    },
+    'iter1': {
+      global: 'assets/complex/complex3/sub_task_2/demo0_iter1_try0_viewer_cam_sensor.mp4',
+      overhead: 'assets/complex/complex3/sub_task_2/demo0_iter1_try0_external_cam0.mp4',
+    },
+    'iter2': {
+      global: 'assets/complex/complex3/sub_task_2/demo0_iter2_try0_viewer_cam_sensor.mp4',
+      overhead: 'assets/complex/complex3/sub_task_2/demo0_iter2_try0_external_cam0.mp4',
+    }
   };
 
   // ==========================================
@@ -890,10 +953,15 @@
   function updateEvolution1(iterId, captionText, clickedElement) {
     const videoPath = evolutionData1[iterId];
     if(videoPath) {
-      const vid = document.getElementById('evolution-video-1');
-      vid.src = videoPath;
-      vid.load();
-      vid.play();
+      const vidGlobal = document.getElementById('evolution-video-1-global');
+      const vidOverhead = document.getElementById('evolution-video-1-overhead');
+      
+      vidGlobal.src = videoPath.global;
+      vidOverhead.src = videoPath.overhead;
+      
+      vidGlobal.load(); vidGlobal.play();
+      vidOverhead.load(); vidOverhead.play();
+
       document.getElementById('evolution-caption-1').innerText = captionText;
       
       const links = document.querySelectorAll('#evolution-menu-1 a');
@@ -905,8 +973,15 @@
   function updateEvolution3(iterId, captionText, clickedElement) {
     const videoPath = evolutionData3[iterId];
     if(videoPath) {
-      const vid = document.getElementById('evolution-video-2');
-      vid.src = videoPath;
+      const vidGlobal = document.getElementById('evolution-video-2-global');
+      const vidOverhead = document.getElementById('evolution-video-2-overhead');
+      
+      vidGlobal.src = videoPath.global;
+      vidOverhead.src = videoPath.overhead;
+      
+      vidGlobal.load(); vidGlobal.play();
+      vidOverhead.load(); vidOverhead.play();
+
       document.getElementById('evolution-caption-2').innerText = captionText;
       
       const links = document.querySelectorAll('#evolution-menu-2 a');
