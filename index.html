@@ -306,11 +306,120 @@
       font-weight: 600;
       margin-bottom: 0.5rem;
     }
+    
+/* ==========================================
+       新增：3D 科技世界背景层样式
+       ========================================== */
+    .top-bg-wrapper {
+      position: relative;
+      background-color: #f0f4f9; /* 科技感浅灰蓝色底色 */
+      padding-bottom: 2rem;
+    }
+
+    /* 1. 背景层：层级最低，包含 3D 网格和线框物体 */
+    .bg-layer {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none; /* 防止挡住鼠标点击 */
+    }
+
+    /* 3D 透视地面网格 */
+    .bg-grid-3d {
+      position: absolute;
+      top: 10%; 
+      left: -50%;
+      width: 200%; 
+      height: 150%;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.9) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.9) 2px, transparent 2px);
+      background-size: 80px 80px;
+      /* 核心：通过 perspective 和 rotateX 把平面拍倒，形成 3D 地平线纵深感 */
+      transform: perspective(1000px) rotateX(72deg);
+      transform-origin: top center;
+    }
+
+    /* 3D 线框物体通用设置 */
+    .wireframe-obj {
+      position: absolute;
+      opacity: 0.8;
+    }
+
+    /* 给线框加一个轻微的上下浮动动画，更有生机 */
+    .wireframe-obj svg {
+      animation: float-up-down 6s ease-in-out infinite;
+    }
+
+    @keyframes float-up-down {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    /* 凸起的“冰箱”网格位置与大小 */
+    .obj-fridge { top: 20%; left: 15%; }
+    .obj-fridge svg { width: 90px; height: 150px; }
+
+    /* 凸起的“桌子/操作台”网格位置与大小，让动画错开 */
+    .obj-table { top: 35%; right: 15%; }
+    .obj-table svg { 
+      width: 150px; height: 120px; 
+      animation-delay: -3s; 
+    }
+
+    /* 2. 渐变遮罩层：放在背景之上，但文字之下 */
+    .bg-fade {
+      position: absolute;
+      bottom: 0; left: 0; width: 100%; height: 350px;
+      /* 向上透明渐变，平滑过渡到底部的白底 */
+      background: linear-gradient(to bottom, rgba(252,252,252,0) 0%, #fcfcfc 100%);
+      z-index: 1; 
+      pointer-events: none;
+    }
+
+    /* 3. 内容层：层级最高，彻底解决 Abstract 文字被遮挡发虚的问题 */
+    .content-layer {
+      position: relative;
+      z-index: 2; /* 确保排在背景和渐变层的上面 */
+    }
 
   </style>
 </head>
 
 <body>
+
+<div class="top-bg-wrapper">
+
+  <div class="bg-layer">
+    <div class="bg-grid-3d"></div>
+    
+    <div class="wireframe-obj obj-fridge">
+      <svg viewBox="0 0 60 100" fill="none" stroke="#ffffff" stroke-width="1.5">
+        <line x1="30" y1="10" x2="30" y2="70" stroke="rgba(255,255,255,0.4)"/>
+        <line x1="0" y1="85" x2="30" y2="70" stroke="rgba(255,255,255,0.4)"/>
+        <line x1="60" y1="85" x2="30" y2="70" stroke="rgba(255,255,255,0.4)"/>
+        <polygon points="30,10 60,25 30,40 0,25" fill="rgba(255,255,255,0.3)"/>
+        <polygon points="0,25 30,40 30,100 0,85" fill="rgba(255,255,255,0.1)"/>
+        <polygon points="30,40 60,25 60,85 30,100" fill="rgba(255,255,255,0.15)"/>
+      </svg>
+    </div>
+
+    <div class="wireframe-obj obj-table">
+      <svg viewBox="0 0 100 80" fill="none" stroke="#ffffff" stroke-width="1.5">
+        <line x1="50" y1="10" x2="50" y2="40" stroke="rgba(255,255,255,0.4)"/>
+        <line x1="0" y1="60" x2="50" y2="40" stroke="rgba(255,255,255,0.4)"/>
+        <line x1="100" y1="60" x2="50" y2="40" stroke="rgba(255,255,255,0.4)"/>
+        <polygon points="50,10 100,30 50,50 0,30" fill="rgba(255,255,255,0.3)"/>
+        <polygon points="0,30 50,50 50,80 0,60" fill="rgba(255,255,255,0.1)"/>
+        <polygon points="50,50 100,30 100,60 50,80" fill="rgba(255,255,255,0.15)"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="bg-fade"></div>
+
+  <div class="content-layer">
 
 <!-- Header Section -->
 <section class="hero">
@@ -430,6 +539,10 @@
     </div>
   </div>
 </section>
+
+<!-- 网格背景结束 -->
+</div>
+</div>
 
 <!-- Pipeline Section (PDF Embedding) -->
 <section class="section">
